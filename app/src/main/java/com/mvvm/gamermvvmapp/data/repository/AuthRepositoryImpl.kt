@@ -3,6 +3,7 @@ package com.mvvm.gamermvvmapp.data.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.mvvm.gamermvvmapp.domain.model.Response
+import com.mvvm.gamermvvmapp.domain.model.User
 import com.mvvm.gamermvvmapp.domain.repository.AuthRepository
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
@@ -25,6 +26,16 @@ class AuthRepositoryImpl @Inject constructor (private val firebaseAuth: Firebase
             val result = firebaseAuth.signInWithEmailAndPassword(email,password).await()
             Response.Success(result.user!!)
         }catch(e:Exception){
+            e.printStackTrace()
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun signUp(user: User): Response<FirebaseUser> {
+        return try{
+            val result = firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).await()
+            Response.Success(result.user!!)
+        }catch (e: Exception){
             e.printStackTrace()
             Response.Failure(e)
         }

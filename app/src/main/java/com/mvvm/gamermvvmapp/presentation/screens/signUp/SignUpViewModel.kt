@@ -4,11 +4,21 @@ import android.util.Patterns
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.mvvm.gamermvvmapp.domain.model.Response
+import com.mvvm.gamermvvmapp.domain.model.User
+import com.mvvm.gamermvvmapp.domain.use_cases.auth.AuthUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(): ViewModel() {
+class SignUpViewModel @Inject constructor(private val authUseCases: AuthUseCases): ViewModel() {
 
     //EMAIL
     var email: MutableState<String> = mutableStateOf("")
@@ -32,6 +42,24 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
     //BUTTON
     var isEnabledLoginButton = false
 
+    private val _signUpFlow = MutableStateFlow<Response<FirebaseUser>?>(null)
+    val signUpFlow: StateFlow<Response<FirebaseUser>?> = _signUpFlow
+
+
+    fun onSignUp(){
+        val user = User(
+            username = username.value,
+            email = email.value,
+            password = password.value
+        )
+        signUp(user)
+    }
+    // ViewModelScoper porque se estan usando corrutinas
+    fun signUp(user: User) = viewModelScope.launch{
+        _signUpFlow.value = Response.Loading
+        val result = authUseCases.signUp(user)
+        _signUpFlow.value = result
+    }
     fun validateEmail(){
         // basicamente lo que hace este if es mirar si es un correo valido
         if(Patterns.EMAIL_ADDRESS.matcher(email.value).matches()){

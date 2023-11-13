@@ -28,7 +28,7 @@ fun SignUpScreen(navController: NavHostController){
             navController = navController)
         },
         content = {
-            SignUpContent()
+            SignUpContent(navController)
                       },
         bottomBar = {}
     )

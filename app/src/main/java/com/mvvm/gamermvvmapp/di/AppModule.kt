@@ -7,6 +7,7 @@ import com.mvvm.gamermvvmapp.domain.use_cases.auth.AuthUseCases
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.GetCurrentUser
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.LogOut
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.Login
+import com.mvvm.gamermvvmapp.domain.use_cases.auth.SignUp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +28,7 @@ object AppModule {
         // ac
         getCurrentUser = GetCurrentUser(repository),
         login = Login(repository),
-        logOut = LogOut(repository)
+        logOut = LogOut(repository),
+        signUp = SignUp(repository)
     )
 }
