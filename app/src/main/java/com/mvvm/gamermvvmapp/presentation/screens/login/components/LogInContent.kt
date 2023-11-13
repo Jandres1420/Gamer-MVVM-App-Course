@@ -34,10 +34,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.mvvm.gamermvvmapp.R
 import com.mvvm.gamermvvmapp.domain.model.Response
 import com.mvvm.gamermvvmapp.presentation.components.DefaultButton
 import com.mvvm.gamermvvmapp.presentation.components.DefaultTextField
+import com.mvvm.gamermvvmapp.presentation.navigation.AppScreen
 import com.mvvm.gamermvvmapp.presentation.screens.login.LogInViewModel
 import com.mvvm.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 import com.mvvm.gamermvvmapp.presentation.ui.theme.Red500
@@ -46,7 +49,7 @@ import com.mvvm.gamermvvmapp.presentation.ui.theme.Red500
 @Composable
 //IMPORTANTISIMO TENER TODA LA PARTE UI ECHA ANTES DE USAR VIEWMODEL
 // LA INSTANCIA LOGINVIWMODEL JAMAS FUE DECLARADA GRACIAS A LA INJECCION = hiltViewModel())
-fun LogInContent(viewModel: LogInViewModel = hiltViewModel()){
+fun LogInContent(navController: NavHostController, viewModel: LogInViewModel = hiltViewModel()){
 
     // ESTA ES LA VIA PARA PODER CONECTARSE CON EL VIEWMODEL
     val loginFlow = viewModel.loginFlow.collectAsState()
@@ -74,6 +77,14 @@ fun LogInContent(viewModel: LogInViewModel = hiltViewModel()){
 
             // la pregunta de porque en elwhen se esta poniendo is Response.Success  es porque es una  data class
             is Response.Success -> {
+                // funcion de corrutina pasandole una función lambda, efecto secundario, SE USA DE ESTA MANERA EL NAVIGATE YA QUE SE ESTA USANDO UN ESTADO
+                /// EN ESTE CASO SOLO VA A NAVEGAR A LA PANTALLA DE PROFILE CUANDO EL ESTA SEA EXITOSO
+                LaunchedEffect(Unit){
+                    // de esta manera vamos a la pantalle profile, pero la idea es que no le pueda da rpara atras por lo que se usa el metodo popUpTo
+                    navController.navigate(route = AppScreen.Profile.route){
+                        popUpTo(AppScreen.Login.route){ inclusive = true}
+                    }
+                }
                 Toast.makeText(LocalContext.current, "Usuario Logeado", Toast.LENGTH_LONG).show()
             }
             is Response.Failure -> {

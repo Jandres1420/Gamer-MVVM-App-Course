@@ -5,6 +5,7 @@ import com.mvvm.gamermvvmapp.data.repository.AuthRepositoryImpl
 import com.mvvm.gamermvvmapp.domain.repository.AuthRepository
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.AuthUseCases
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.GetCurrentUser
+import com.mvvm.gamermvvmapp.domain.use_cases.auth.LogOut
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.Login
 import dagger.Module
 import dagger.Provides
@@ -23,7 +24,9 @@ object AppModule {
 
     @Provides
     fun provideAuthUseCases(repository: AuthRepository) = AuthUseCases(
+        // ac
         getCurrentUser = GetCurrentUser(repository),
-        login = Login(repository)
+        login = Login(repository),
+        logOut = LogOut(repository)
     )
 }

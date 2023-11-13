@@ -36,6 +36,14 @@ class LogInViewModel @Inject constructor(private val authUseCases: AuthUseCases)
     //BUTTON
     var isEnabledLoginButton = false
 
+    val currentUser = authUseCases.getCurrentUser()
+
+    //ESTO SERA LO PRIMERO QUE SE EJECUTE CUANDO SE CREE LA CLASE
+    init {
+        if(currentUser!=null){//SESION INICIADA
+            _loginFlow.value = Response.Success(currentUser)
+        }
+    }
     fun validateEmail(){
         // basicamente lo que hace este if es mirar si es un correo valido
         if(Patterns.EMAIL_ADDRESS.matcher(email.value).matches()){

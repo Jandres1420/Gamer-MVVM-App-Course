@@ -43,7 +43,7 @@ fun LoginScreen(navController: NavHostController) {
         topBar = {},
         content = {
 //            BodyContent()
-            LogInContent()
+            LogInContent(navController)
                   },
         bottomBar = {
             LogInBottomBar(navController)
