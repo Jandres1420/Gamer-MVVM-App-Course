@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.mvvm.gamermvvmapp.presentation.components.DefaultButton
 import com.mvvm.gamermvvmapp.presentation.navigation.AppScreen
+import com.mvvm.gamermvvmapp.presentation.screens.profile.components.ProfileContent
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -18,15 +19,7 @@ fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel 
     Scaffold(
         topBar = {},
         content = {
-            DefaultButton(text = "Cerrar sesion"
-                , onClick = {
-                    viewModel.logOut()
-                    navController.navigate(AppScreen.Login.route){
-                        // esto eliminara la ruta anterior
-                        popUpTo(AppScreen.Profile.route){ inclusive = true}
-                    }
-                    }
-                , modifier = Modifier)
+            ProfileContent(navController)
         },
         bottomBar = {}
     )
