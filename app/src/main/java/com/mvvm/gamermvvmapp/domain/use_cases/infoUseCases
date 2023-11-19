@@ -1,0 +1,4 @@
+1) Use cases sera el intermediario entre el repositorio y el viewModel, por ejemplo al crear un usuario nuevo
+2) se creo la clase Create con lo anteriormente dicho con la injeccion de dependencias en AppModule
+3) la data class para hacer referencia a cada uno de los casos de uso como crear borrar de firestore de usuarios
+4) Despues de hacer referencia al caso de uso especifico y ponerlo en la dataClass toca agregarlo en AppModule para poderpasarle los parametros del repositorio

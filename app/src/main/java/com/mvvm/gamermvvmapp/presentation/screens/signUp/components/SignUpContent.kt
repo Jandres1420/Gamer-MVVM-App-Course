@@ -75,6 +75,8 @@ fun SignUpContent(navController: NavHostController, viewModel: SignUpViewModel =
                 // se pone en este caso del when is porque Response.Success es un  data class
                 is Response.Success ->{
                     LaunchedEffect(Unit){
+                        // se esta diciendo que cada vez que un usuario sea creado correctamente y su estado sea SUCCESS cree el usuario en la coleccion
+                        viewModel.createUser()
                         navController.popBackStack(AppScreen.Login.route, true)
                         navController.navigate(route = AppScreen.Profile.route)
                     }

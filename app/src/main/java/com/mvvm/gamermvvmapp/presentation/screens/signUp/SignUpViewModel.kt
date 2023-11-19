@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.mvvm.gamermvvmapp.domain.model.Response
 import com.mvvm.gamermvvmapp.domain.model.User
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.AuthUseCases
+import com.mvvm.gamermvvmapp.domain.use_cases.users.UsersUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(private val authUseCases: AuthUseCases): ViewModel() {
+class SignUpViewModel @Inject constructor(private val authUseCases: AuthUseCases, private val usersUseCases: UsersUseCases): ViewModel() {
 
     //EMAIL
     var email: MutableState<String> = mutableStateOf("")
@@ -45,20 +46,30 @@ class SignUpViewModel @Inject constructor(private val authUseCases: AuthUseCases
     private val _signUpFlow = MutableStateFlow<Response<FirebaseUser>?>(null)
     val signUpFlow: StateFlow<Response<FirebaseUser>?> = _signUpFlow
 
+    var user = User()
 
     fun onSignUp(){
-        val user = User(
-            username = username.value,
-            email = email.value,
-            password = password.value
-        )
+        user.username = username.value
+        user.email = email.value
+        user.password = password.value
+
         signUp(user)
     }
     // ViewModelScoper porque se estan usando corrutinas
+    // PORQUE ES MUY IMPORTANTE YA QUE NO SABEMOS EXACTAMENTE CUANDO SE VA HACER ESTE LLAMADO
+    // Este metodo hara la creacion de usuario en fireAuthentication
     fun signUp(user: User) = viewModelScope.launch{
         _signUpFlow.value = Response.Loading
         val result = authUseCases.signUp(user)
         _signUpFlow.value = result
+    }
+
+    fun createUser() = viewModelScope.launch {
+        user.id = authUseCases.getCurrentUser()!!.uid
+        usersUseCases.create(user)
+    }
+    fun createUser(user: User) = viewModelScope.launch {
+
     }
     fun validateEmail(){
         // basicamente lo que hace este if es mirar si es un correo valido
