@@ -81,11 +81,7 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
             text = "Editar datos"
             ,color = Color.White,
             onClick = {
-//                viewModel.logOut()
-//                navController.navigate(AppScreen.Login.route){
-//                    // esto eliminara la ruta anterior
-//                    popUpTo(AppScreen.Profile.route){ inclusive = true}
-//                }
+                navController.navigate(route = AppScreen.ProfileEdit.route)
             },
             icon = Icons.Default.Edit
             )

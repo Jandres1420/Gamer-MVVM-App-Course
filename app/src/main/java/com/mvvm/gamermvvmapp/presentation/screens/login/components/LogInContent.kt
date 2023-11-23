@@ -52,7 +52,7 @@ import com.mvvm.gamermvvmapp.presentation.ui.theme.Red500
 fun LogInContent(navController: NavHostController, viewModel: LogInViewModel = hiltViewModel()){
 
     // ESTA ES LA VIA PARA PODER CONECTARSE CON EL VIEWMODEL
-    val loginFlow = viewModel.loginFlow.collectAsState()
+//    val loginFlow = viewModel.loginFlow.collectAsState()
 //    para modificar que todos los componentes tenganun atributo se usa modifier dentro del Column
     Box(
 //        fil max width cubrira todo el ancho, wrapcontent hara que todo se ponga con respecto al tamaño que tenga
@@ -65,41 +65,14 @@ fun LogInContent(navController: NavHostController, viewModel: LogInViewModel = h
         cardForm(viewModel)
 
     }
-    // evaluar el estado en el que esta la petición
-    loginFlow.value.let {
-        when(it){
-            Response.Loading -> {
-                Box(contentAlignment =  Alignment.Center,
-                modifier = Modifier.fillMaxSize()){
-                    CircularProgressIndicator()
-                }
-            }
 
-            // la pregunta de porque en elwhen se esta poniendo is Response.Success  es porque es una  data class
-            is Response.Success -> {
-                // funcion de corrutina pasandole una función lambda, efecto secundario, SE USA DE ESTA MANERA EL NAVIGATE YA QUE SE ESTA USANDO UN ESTADO
-                /// EN ESTE CASO SOLO VA A NAVEGAR A LA PANTALLA DE PROFILE CUANDO EL ESTA SEA EXITOSO
-                LaunchedEffect(Unit){
-                    // de esta manera vamos a la pantalle profile, pero la idea es que no le pueda da rpara atras por lo que se usa el metodo popUpTo
-                    navController.navigate(route = AppScreen.Profile.route){
-                        popUpTo(AppScreen.Login.route){ inclusive = true}
-                    }
-                }
-                Toast.makeText(LocalContext.current, "Usuario Logeado", Toast.LENGTH_LONG).show()
-            }
-            is Response.Failure -> {
-                Toast.makeText(LocalContext.current, it.Exception?.message?: "Error Desconocido", Toast.LENGTH_LONG).show()
-            }
 
-            else -> {}
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun cardForm(viewModel: LogInViewModel){
-
+    var state = viewModel.state
     Card(
         colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.tertiary,
@@ -120,21 +93,22 @@ fun cardForm(viewModel: LogInViewModel){
                 color = Color.Gray
             )
 
-            DefaultTextField(value = viewModel.email.value,
+            DefaultTextField(
+                value = state.email,
                 modifier =  Modifier.padding(top = 25.dp),
-                onValueChange ={viewModel.email.value =  it}
+                onValueChange ={viewModel.onEmailInput(it)}
                 , label = "Correo electronico"
                 , icon = Icons.Default.Email
                 , keyBoardType =  KeyboardType.Email
-                , errorMsg = viewModel.emailErrMsg.value
+                , errorMsg = viewModel.emailErrMsg
                 , validateField = {viewModel.validateEmail()})
-            DefaultTextField(value = viewModel.password.value,
+            DefaultTextField(value = state.password,
                 modifier =  Modifier.padding(top = 10.dp),
-                onValueChange ={viewModel.password.value = it}
+                onValueChange ={viewModel.onPasswordInput(it)}
                 , label = "Contraseña"
                 , icon = Icons.Default.Lock
                 , hideText = true,
-                errorMsg = viewModel.passwordErrMsg.value
+                errorMsg = viewModel.passwordErrMsg
                 , validateField = {viewModel.validatePassword()})
             DefaultButton(text = "INICIAR SESION", onClick = {
                 viewModel.login()

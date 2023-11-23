@@ -5,4 +5,6 @@ sealed class AppScreen(val route:String){
     object SignUp: AppScreen("signup")
     object Profile: AppScreen("profile")
 
+    object ProfileEdit: AppScreen("profile/edit")
+
 }

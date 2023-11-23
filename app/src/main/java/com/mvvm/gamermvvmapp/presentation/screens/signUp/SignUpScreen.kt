@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.mvvm.gamermvvmapp.presentation.components.DefaultTopBar
 import com.mvvm.gamermvvmapp.presentation.screens.login.components.LogInContent
+import com.mvvm.gamermvvmapp.presentation.screens.signUp.components.SignUp
 import com.mvvm.gamermvvmapp.presentation.screens.signUp.components.SignUpContent
 import com.mvvm.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 
@@ -32,6 +33,9 @@ fun SignUpScreen(navController: NavHostController){
                       },
         bottomBar = {}
     )
+
+    // la logica del estado 
+    SignUp(navController = navController)
 }
 
 @Preview(showBackground = true, showSystemUi = true)

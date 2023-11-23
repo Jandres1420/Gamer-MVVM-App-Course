@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mvvm.gamermvvmapp.R
 import com.mvvm.gamermvvmapp.presentation.screens.login.components.LogInBottomBar
 import com.mvvm.gamermvvmapp.presentation.screens.login.components.LogInContent
+import com.mvvm.gamermvvmapp.presentation.screens.login.components.Login
 import com.mvvm.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -49,6 +50,8 @@ fun LoginScreen(navController: NavHostController) {
             LogInBottomBar(navController)
         }
     )
+    // MANEJAR EL ESTADO DE LA PETICION DE LOGIN
+    Login(navController = navController)
 
 }
 
