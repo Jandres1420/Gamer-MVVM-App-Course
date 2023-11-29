@@ -81,7 +81,8 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
             text = "Editar datos"
             ,color = Color.White,
             onClick = {
-                navController.navigate(route = AppScreen.ProfileEdit.route)
+                // AL PASAR UN PARAMETRO POR LA RUTA USAMOS EL METODO passUser, que convertira el objeto User a un String por JSON
+                navController.navigate(route = AppScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
             },
             icon = Icons.Default.Edit
             )
