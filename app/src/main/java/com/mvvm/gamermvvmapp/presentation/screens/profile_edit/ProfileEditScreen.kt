@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.mvvm.gamermvvmapp.presentation.components.DefaultTopBar
 import com.mvvm.gamermvvmapp.presentation.screens.profile_edit.components.ProfileEditContent
+import com.mvvm.gamermvvmapp.presentation.screens.profile_edit.components.Update
 import com.mvvm.gamermvvmapp.presentation.screens.signUp.components.SignUpContent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -29,6 +30,7 @@ fun ProfileEditScreen(
         },
         bottomBar = {}
     )
+    Update()
 
 
 }

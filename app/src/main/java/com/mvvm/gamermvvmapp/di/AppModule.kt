@@ -17,6 +17,7 @@ import com.mvvm.gamermvvmapp.domain.use_cases.auth.Login
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.SignUp
 import com.mvvm.gamermvvmapp.domain.use_cases.users.Create
 import com.mvvm.gamermvvmapp.domain.use_cases.users.GetUserById
+import com.mvvm.gamermvvmapp.domain.use_cases.users.Update
 import com.mvvm.gamermvvmapp.domain.use_cases.users.UsersUseCases
 import dagger.Module
 import dagger.Provides
@@ -56,6 +57,7 @@ object AppModule {
     @Provides
     fun provideUsersUseCases(repository: UsersRepository) = UsersUseCases(
         create = Create(repository),
-        getUserById = GetUserById(repository)
+        getUserById = GetUserById(repository),
+        update = Update(repository)
     )
 }

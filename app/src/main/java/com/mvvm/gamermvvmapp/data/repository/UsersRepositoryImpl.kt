@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 import javax.inject.Inject
-
+// importante saaber que en la injeccion se dice que userRef esta en la coleccion User
 class UsersRepositoryImpl @Inject constructor(private val userRef: CollectionReference): UsersRepository {
 
     // la manera sin injeccion de dependencias seria
@@ -32,6 +32,23 @@ class UsersRepositoryImpl @Inject constructor(private val userRef: CollectionRef
             Response.Failure(e)
         }
 
+    }
+
+    override suspend fun update(user: User): Response<Boolean> {
+        return try {
+
+            val map: MutableMap<String, Any > = HashMap()
+
+            map["username"] = user.username
+            map["image"] = user.image
+            // para actualizar en firestore nos metemos a document del usuario por id y el metodo update solo
+            // recibe un map con los campos a a ctualizar
+            userRef.document(user.id).update(map).await()
+            Response.Success(true)
+        }catch (e: Exception){
+            e.printStackTrace()
+            Response.Failure(e)
+        }
     }
 
     // al usar flow, podemos usar el metodo trySend() este metodo emitira la información cuando sea requerida

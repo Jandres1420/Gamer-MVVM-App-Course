@@ -10,8 +10,11 @@ interface UsersRepository {
 
 
     suspend fun create(user: User): Response<Boolean>
+    suspend fun update(user: User): Response<Boolean>
 
     // De retorno normal seria User pero como lo queremos en tiempo real usaremos Flow
 //    y no se usa suspend porque no es una corrutina simple ya que firestore la brinda así
     fun getUserById(id : String): Flow<User>
+
+
 }
