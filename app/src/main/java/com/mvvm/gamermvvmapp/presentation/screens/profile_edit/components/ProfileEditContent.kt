@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -19,11 +20,12 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -37,6 +39,7 @@ import coil.compose.AsyncImage
 import com.mvvm.gamermvvmapp.R
 import com.mvvm.gamermvvmapp.presentation.components.DefaultButton
 import com.mvvm.gamermvvmapp.presentation.components.DefaultTextField
+import com.mvvm.gamermvvmapp.presentation.components.DialogCapturePicture
 import com.mvvm.gamermvvmapp.presentation.screens.profile_edit.ProfileEditViewModel
 import com.mvvm.gamermvvmapp.presentation.ui.theme.Red500
 import com.mvvm.gamermvvmapp.presentation.utils.ComposeFileProvider
@@ -68,6 +71,7 @@ fun ProfileEditContent(
 @Composable
 fun CardFormSignUp(viewModel: ProfileEditViewModel) {
     val state = viewModel.state
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.tertiary,
@@ -116,19 +120,19 @@ fun CardFormSignUp(viewModel: ProfileEditViewModel) {
 
 @Composable
 fun BoxHeader(viewModel: ProfileEditViewModel) {
-    val imagePicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri ->
-            uri?.let { viewModel.onGalleryResult(it) }
-        })
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture(),
-        onResult = { hasImage ->
-            viewModel.onResult(hasImage)
-        })
-
-    val context = LocalContext.current
-
+    // Es el evento para que sepa cuando tomar foto y es una forma mejorada de hacerlo
+    viewModel.resultingActivityHandler.handle()
+    // el esatdo para desplegar el Dialog
+    var dialogState = remember{
+        mutableStateOf(false)
+    }
+    DialogCapturePicture(
+        status = dialogState,
+        takePhoto = {
+            viewModel.takePhoto()
+        },
+        pickImage = { viewModel.pickImage()}
+    )
     Box(
         modifier = Modifier
             .height(235.dp)
@@ -142,23 +146,22 @@ fun BoxHeader(viewModel: ProfileEditViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.padding(top = 20.dp))
-            if (viewModel.hasImage && viewModel.imageUri != null) {
+            if (viewModel.imageUri != "") {
                 // DE ESTA MANERA QUEDA REEDONDEADA LA IMAGEN  EN EL MODIFIER
                 AsyncImage(
                     modifier = Modifier
                         .height(100.dp)
-                        .clip(CircleShape),
+                        .width(100.dp)
+                        .clip(CircleShape).clickable { dialogState.value = true },
                     model = viewModel.imageUri,
-                    contentDescription = "Selecteed image"
+                    contentDescription = "Selecteed image",
+                    contentScale = ContentScale.Crop
                 )
             } else {
                 Image(modifier = Modifier
                     .height(130.dp)
                     .clickable {
-//                        imagePicker.launch("image/*")
-                        val uri = ComposeFileProvider.getImageUri(context)
-                        viewModel.imageUri = uri
-                        cameraLauncher.launch(uri)
+                        dialogState.value = true
                     },
                     painter = painterResource(id = R.drawable.user),
                     contentDescription = "Imagen de usuario")
