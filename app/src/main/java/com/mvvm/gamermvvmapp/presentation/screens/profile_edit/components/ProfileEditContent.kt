@@ -106,7 +106,7 @@ fun CardFormSignUp(viewModel: ProfileEditViewModel) {
             DefaultButton(
                 text = "ACTUALIZAR DATOS",
                 onClick = {
-                    viewModel.onUpdate()
+                    viewModel.saveImage()
                 },
                 modifier = Modifier
                     .fillMaxWidth()

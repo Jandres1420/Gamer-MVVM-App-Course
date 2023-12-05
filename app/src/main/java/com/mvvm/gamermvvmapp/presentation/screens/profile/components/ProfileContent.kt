@@ -10,12 +10,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.mvvm.gamermvvmapp.R
 import com.mvvm.gamermvvmapp.presentation.components.DefaultButton
 import com.mvvm.gamermvvmapp.presentation.navigation.AppScreen
@@ -36,11 +39,15 @@ import com.mvvm.gamermvvmapp.presentation.screens.profile.ProfileViewModel
 import com.mvvm.gamermvvmapp.presentation.ui.theme.Darkgray500
 import com.mvvm.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 import com.mvvm.gamermvvmapp.presentation.ui.theme.Red500
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel = hiltViewModel()) {
     // column es como linear layout
-    Column(modifier =  Modifier.fillMaxSize().background(Darkgray500),
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Darkgray500),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // para elementos uno encima del otro se usa Box
@@ -61,7 +68,19 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
                     , fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(55.dp))
-                Image(modifier = Modifier.size(115.dp), painter = painterResource(id = R.drawable.user), contentDescription = "")
+                if(viewModel.userData.image != ""){
+                    AsyncImage(
+                        modifier = Modifier.size(115.dp).clip(CircleShape),
+                        model = viewModel.userData.image,
+                        contentDescription = "User Image",
+                        contentScale = ContentScale.Crop
+                    )
+                }else{
+                    Image(modifier = Modifier.size(115.dp),
+                        painter = painterResource(id = R.drawable.user),
+                        contentDescription = "")
+                }
+
             }
         }
         Spacer(modifier = Modifier.height(55.dp))
@@ -81,6 +100,9 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
             text = "Editar datos"
             ,color = Color.White,
             onClick = {
+                // ACA NOS ASEGURAMOS QUE LA RUTA NO ESTE CONFUNDEINDOSE CON LA URL DE LA IMAGEN DEL USUARIO
+                // DICIENDO QUE ESA URL QUE ESTA EN USERDATA NO AFECTA A LA RUTA
+                viewModel.userData.image = URLEncoder.encode(viewModel.userData.image, StandardCharsets.UTF_8.toString())
                 // AL PASAR UN PARAMETRO POR LA RUTA USAMOS EL METODO passUser, que convertira el objeto User a un String por JSON
                 navController.navigate(route = AppScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
             },

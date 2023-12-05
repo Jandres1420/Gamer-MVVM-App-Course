@@ -1,10 +1,6 @@
 package com.mvvm.gamermvvmapp.presentation.screens.profile_edit
 
 import android.content.Context
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,12 +10,12 @@ import androidx.lifecycle.viewModelScope
 import com.mvvm.gamermvvmapp.domain.model.Response
 import com.mvvm.gamermvvmapp.domain.model.User
 import com.mvvm.gamermvvmapp.domain.use_cases.users.UsersUseCases
-import com.mvvm.gamermvvmapp.presentation.screens.signUp.SignUpState
 import com.mvvm.gamermvvmapp.presentation.utils.ComposeFileProvider
 import com.mvvm.gamermvvmapp.presentation.utils.ResultingActivityHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 
@@ -39,23 +35,40 @@ class ProfileEditViewModel @Inject constructor
     var usernameErrMsg by mutableStateOf("")
         private set
 
-    //asi recuperamos de la ruta
-    val userString = savedStateHandle.get<String>("user")
-    val user = User.fromJson(userString!!)
+    //asi recuperamos de la ruta (ARGUMENTS)
+    //ARGUMENTS
+    val data = savedStateHandle.get<String>("user")
+    val user = User.fromJson(data!!)
 
+    //RESPONSE
     var updateResponse by mutableStateOf<Response<Boolean>?>(null)
+        private set
+
+    // RESPONSE IMAGE
+    var saveImageResponse by mutableStateOf<Response<String>?>(null)
         private set
 
     var imageUri by mutableStateOf("")
     var resultingActivityHandler = ResultingActivityHandler()
 
+    // FILE
+    var file: File? = null
+
     init {
         state = state.copy(username = user.username)
     }
 
+    fun saveImage() = viewModelScope.launch {
+        if(file != null){
+            saveImageResponse = Response.Loading
+            val result = userUsersUseCases.saveImage(file!!)
+            saveImageResponse = result
+        }
+    }
     fun pickImage() = viewModelScope.launch {
         val result = resultingActivityHandler.getContent("image/*")
         if(result != null){
+            file = ComposeFileProvider.createFileFromUri(context, result)
             imageUri = result.toString()
         }
 
@@ -67,6 +80,7 @@ class ProfileEditViewModel @Inject constructor
 //        por eso se pasa con la anotacion a la clase en el constructor
         if(result  != null){
             imageUri = ComposeFileProvider.getPathFromBitmap(context, result!!)
+            file = File(imageUri)
         }
     }
 
@@ -77,11 +91,11 @@ class ProfileEditViewModel @Inject constructor
         updateResponse = result
     }
 
-    fun onUpdate() {
+    fun onUpdate(url: String) {
         val myUser = User(
             id = user.id,
             username = state.username,
-            image = ""
+            image = url
         )
         update(myUser)
     }

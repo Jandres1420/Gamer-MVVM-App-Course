@@ -1,9 +1,11 @@
 package com.mvvm.gamermvvmapp.data.repository
 
+import android.net.Uri
 import androidx.compose.runtime.snapshotFlow
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
 import com.mvvm.gamermvvmapp.domain.model.Response
 import com.mvvm.gamermvvmapp.domain.model.User
 import com.mvvm.gamermvvmapp.domain.repository.UsersRepository
@@ -11,10 +13,14 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.io.File
 import java.lang.Exception
 import javax.inject.Inject
 // importante saaber que en la injeccion se dice que userRef esta en la coleccion User
-class UsersRepositoryImpl @Inject constructor(private val userRef: CollectionReference): UsersRepository {
+class UsersRepositoryImpl @Inject constructor(
+    private val userRef: CollectionReference,
+    private val storageUsersRef: StorageReference
+): UsersRepository {
 
     // la manera sin injeccion de dependencias seria
 //    val firebase = Firebase.firestore
@@ -45,6 +51,19 @@ class UsersRepositoryImpl @Inject constructor(private val userRef: CollectionRef
             // recibe un map con los campos a a ctualizar
             userRef.document(user.id).update(map).await()
             Response.Success(true)
+        }catch (e: Exception){
+            e.printStackTrace()
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun saveImage(file: File): Response<String> {
+        return try {
+            val fromFile = Uri.fromFile(file)
+            val ref = storageUsersRef.child(file.name)
+            val uploadTask = ref.putFile(fromFile).await()
+            val url = ref.downloadUrl.await()
+            return  Response.Success(url.toString())
         }catch (e: Exception){
             e.printStackTrace()
             Response.Failure(e)

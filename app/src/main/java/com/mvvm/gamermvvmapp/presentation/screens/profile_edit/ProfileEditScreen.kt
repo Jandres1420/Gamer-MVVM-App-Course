@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.mvvm.gamermvvmapp.presentation.components.DefaultTopBar
 import com.mvvm.gamermvvmapp.presentation.screens.profile_edit.components.ProfileEditContent
+import com.mvvm.gamermvvmapp.presentation.screens.profile_edit.components.SaveImage
 import com.mvvm.gamermvvmapp.presentation.screens.profile_edit.components.Update
 import com.mvvm.gamermvvmapp.presentation.screens.signUp.components.SignUpContent
 
@@ -30,6 +31,7 @@ fun ProfileEditScreen(
         },
         bottomBar = {}
     )
+    SaveImage()
     Update()
 
 
