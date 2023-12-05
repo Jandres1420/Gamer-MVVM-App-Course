@@ -102,7 +102,7 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
             onClick = {
                 // ACA NOS ASEGURAMOS QUE LA RUTA NO ESTE CONFUNDEINDOSE CON LA URL DE LA IMAGEN DEL USUARIO
                 // DICIENDO QUE ESA URL QUE ESTA EN USERDATA NO AFECTA A LA RUTA
-                viewModel.userData.image = URLEncoder.encode(viewModel.userData.image, StandardCharsets.UTF_8.toString())
+//                viewModel.userData.image = URLEncoder.encode(viewModel.userData.image, StandardCharsets.UTF_8.toString())
                 // AL PASAR UN PARAMETRO POR LA RUTA USAMOS EL METODO passUser, que convertira el objeto User a un String por JSON
                 navController.navigate(route = AppScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
             },

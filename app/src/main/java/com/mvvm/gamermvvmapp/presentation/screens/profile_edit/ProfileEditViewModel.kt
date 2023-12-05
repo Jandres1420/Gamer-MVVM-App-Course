@@ -48,14 +48,17 @@ class ProfileEditViewModel @Inject constructor
     var saveImageResponse by mutableStateOf<Response<String>?>(null)
         private set
 
-    var imageUri by mutableStateOf("")
+
+
     var resultingActivityHandler = ResultingActivityHandler()
 
     // FILE
     var file: File? = null
 
     init {
-        state = state.copy(username = user.username)
+        // dentro del estado del formulario tambien esta image que se llama igual que firestore
+        state = state.copy(username = user.username, image = user.image)
+
     }
 
     fun saveImage() = viewModelScope.launch {
@@ -69,7 +72,7 @@ class ProfileEditViewModel @Inject constructor
         val result = resultingActivityHandler.getContent("image/*")
         if(result != null){
             file = ComposeFileProvider.createFileFromUri(context, result)
-            imageUri = result.toString()
+            state = state.copy(image = result.toString())
         }
 
     }
@@ -79,8 +82,8 @@ class ProfileEditViewModel @Inject constructor
 //        para el contexto en el viewModel no es puede usar LocalContext.current por el @Composable
 //        por eso se pasa con la anotacion a la clase en el constructor
         if(result  != null){
-            imageUri = ComposeFileProvider.getPathFromBitmap(context, result!!)
-            file = File(imageUri)
+            state = state.copy(image = ComposeFileProvider.getPathFromBitmap(context, result))
+            file = File(state.image)
         }
     }
 

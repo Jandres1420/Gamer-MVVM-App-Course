@@ -146,14 +146,14 @@ fun BoxHeader(viewModel: ProfileEditViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.padding(top = 20.dp))
-            if (viewModel.imageUri != "") {
+            if (viewModel.state.image != "") {
                 // DE ESTA MANERA QUEDA REEDONDEADA LA IMAGEN  EN EL MODIFIER
                 AsyncImage(
                     modifier = Modifier
                         .height(100.dp)
                         .width(100.dp)
                         .clip(CircleShape).clickable { dialogState.value = true },
-                    model = viewModel.imageUri,
+                    model = viewModel.state.image,
                     contentDescription = "Selecteed image",
                     contentScale = ContentScale.Crop
                 )
