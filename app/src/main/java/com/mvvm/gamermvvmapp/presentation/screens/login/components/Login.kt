@@ -1,19 +1,16 @@
 package com.mvvm.gamermvvmapp.presentation.screens.login.components
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mvvm.gamermvvmapp.domain.model.Response
 import com.mvvm.gamermvvmapp.presentation.components.ProgressBar
-import com.mvvm.gamermvvmapp.presentation.navigation.AppScreen
+import com.mvvm.gamermvvmapp.presentation.navigation.AuthScreen
+import com.mvvm.gamermvvmapp.presentation.navigation.Graph
+import com.mvvm.gamermvvmapp.presentation.navigation.RootScreen
 import com.mvvm.gamermvvmapp.presentation.screens.login.LogInViewModel
 
 @Composable
@@ -29,8 +26,9 @@ fun Login(navController: NavHostController, viewModel: LogInViewModel = hiltView
             /// EN ESTE CASO SOLO VA A NAVEGAR A LA PANTALLA DE PROFILE CUANDO EL ESTA SEA EXITOSO
             LaunchedEffect(Unit){
                 // de esta manera vamos a la pantalle profile, pero la idea es que no le pueda da rpara atras por lo que se usa el metodo popUpTo
-                navController.navigate(route = AppScreen.Profile.route){
-                    popUpTo(AppScreen.Login.route){ inclusive = true}
+                navController.navigate(route = RootScreen.Home.route){
+                    // ya no se elimina la pantalla anterior, si no todo el grafo de auth
+                    popUpTo(Graph.AUTHENTICATION){ inclusive = true}
                 }
             }
             Toast.makeText(LocalContext.current, "Usuario Logeado", Toast.LENGTH_LONG).show()

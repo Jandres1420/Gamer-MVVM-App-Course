@@ -1,19 +1,14 @@
 package com.mvvm.gamermvvmapp.presentation.screens.signUp.components
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mvvm.gamermvvmapp.domain.model.Response
 import com.mvvm.gamermvvmapp.presentation.components.ProgressBar
-import com.mvvm.gamermvvmapp.presentation.navigation.AppScreen
+import com.mvvm.gamermvvmapp.presentation.navigation.AuthScreen
 import com.mvvm.gamermvvmapp.presentation.screens.signUp.SignUpViewModel
 
 @Composable
@@ -27,8 +22,8 @@ fun SignUp(navController: NavHostController, viewModel: SignUpViewModel = hiltVi
             LaunchedEffect(Unit){
                 // se esta diciendo que cada vez que un usuario sea creado correctamente y su estado sea SUCCESS cree el usuario en la coleccion
                 viewModel.createUser()
-                navController.popBackStack(AppScreen.Login.route, true)
-                navController.navigate(route = AppScreen.Profile.route)
+                navController.popBackStack(AuthScreen.Login.route, true)
+                navController.navigate(route = AuthScreen.Profile.route)
             }
         }
         is Response.Failure ->{

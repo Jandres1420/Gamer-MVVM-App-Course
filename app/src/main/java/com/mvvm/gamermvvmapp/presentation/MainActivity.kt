@@ -10,7 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.mvvm.gamermvvmapp.presentation.navigation.AppNavigation
+import com.mvvm.gamermvvmapp.presentation.navigation.RootNavGraph
 import com.mvvm.gamermvvmapp.presentation.screens.login.LoginScreen
 import com.mvvm.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
 
                 ) {
                     navController = rememberNavController()
-                    AppNavigation(navController = navController)
+                    RootNavGraph(navController = navController)
                 }
             }
         }

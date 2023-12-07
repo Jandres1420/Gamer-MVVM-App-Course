@@ -15,10 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.mvvm.gamermvvmapp.presentation.navigation.AppScreen
+import com.mvvm.gamermvvmapp.presentation.navigation.AuthScreen
 
 @Composable
 fun LogInBottomBar(navController: NavHostController) {
@@ -32,7 +31,7 @@ fun LogInBottomBar(navController: NavHostController) {
         Spacer(modifier = Modifier.width(7.dp))
         Text(
             modifier = Modifier.clickable{
-                navController.navigate(route = AppScreen.SignUp.route)
+                navController.navigate(route = AuthScreen.SignUp.route)
             },
             text = "REGISTRATE AQUI",
             color = Color.Red,

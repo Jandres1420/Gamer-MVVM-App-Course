@@ -23,24 +23,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.mvvm.gamermvvmapp.R
 import com.mvvm.gamermvvmapp.presentation.components.DefaultButton
-import com.mvvm.gamermvvmapp.presentation.navigation.AppScreen
+import com.mvvm.gamermvvmapp.presentation.navigation.AuthScreen
 
-import com.mvvm.gamermvvmapp.presentation.screens.login.LoginScreen
 import com.mvvm.gamermvvmapp.presentation.screens.profile.ProfileViewModel
 import com.mvvm.gamermvvmapp.presentation.ui.theme.Darkgray500
-import com.mvvm.gamermvvmapp.presentation.ui.theme.GamerMVVMAppTheme
-import com.mvvm.gamermvvmapp.presentation.ui.theme.Red500
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel = hiltViewModel()) {
@@ -104,7 +97,7 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
                 // DICIENDO QUE ESA URL QUE ESTA EN USERDATA NO AFECTA A LA RUTA
 //                viewModel.userData.image = URLEncoder.encode(viewModel.userData.image, StandardCharsets.UTF_8.toString())
                 // AL PASAR UN PARAMETRO POR LA RUTA USAMOS EL METODO passUser, que convertira el objeto User a un String por JSON
-                navController.navigate(route = AppScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
+                navController.navigate(route = AuthScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
             },
             icon = Icons.Default.Edit
             )
@@ -113,9 +106,9 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
             , text = "Cerrar sesion"
             , onClick = {
                 viewModel.logOut()
-                navController.navigate(AppScreen.Login.route){
+                navController.navigate(AuthScreen.Login.route){
                     // esto eliminara la ruta anterior
-                    popUpTo(AppScreen.Profile.route){ inclusive = true}
+                    popUpTo(AuthScreen.Profile.route){ inclusive = true}
                 }
             }
             )
