@@ -1,5 +1,7 @@
 package com.mvvm.gamermvvmapp.presentation.screens.profile.components
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,14 +32,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mvvm.gamermvvmapp.R
+import com.mvvm.gamermvvmapp.presentation.MainActivity
 import com.mvvm.gamermvvmapp.presentation.components.DefaultButton
 import com.mvvm.gamermvvmapp.presentation.navigation.AuthScreen
+import com.mvvm.gamermvvmapp.presentation.navigation.DetailsScreen
+import com.mvvm.gamermvvmapp.presentation.navigation.Graph
 
 import com.mvvm.gamermvvmapp.presentation.screens.profile.ProfileViewModel
 import com.mvvm.gamermvvmapp.presentation.ui.theme.Darkgray500
 
 @Composable
 fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel = hiltViewModel()) {
+
+    val activity = LocalContext.current as? Activity
+
     // column es como linear layout
     Column(modifier = Modifier
         .fillMaxSize()
@@ -97,7 +106,7 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
                 // DICIENDO QUE ESA URL QUE ESTA EN USERDATA NO AFECTA A LA RUTA
 //                viewModel.userData.image = URLEncoder.encode(viewModel.userData.image, StandardCharsets.UTF_8.toString())
                 // AL PASAR UN PARAMETRO POR LA RUTA USAMOS EL METODO passUser, que convertira el objeto User a un String por JSON
-                navController.navigate(route = AuthScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
+                navController.navigate(route = DetailsScreen.ProfileEdit.passUser(viewModel.userData.toJson()))
             },
             icon = Icons.Default.Edit
             )
@@ -106,10 +115,11 @@ fun ProfileContent(navController: NavHostController, viewModel: ProfileViewModel
             , text = "Cerrar sesion"
             , onClick = {
                 viewModel.logOut()
-                navController.navigate(AuthScreen.Login.route){
-                    // esto eliminara la ruta anterior
-                    popUpTo(AuthScreen.Profile.route){ inclusive = true}
-                }
+//                IMPORTANTE
+//                no se puede mandar como ruta directa el AuthScreen.Login.route, ya que no hay relacion entre el grafo home y el authentication
+//                el grafo que tiene relación entre todos el el ROOT
+                activity?.finish()
+                activity?.startActivity(Intent(activity, MainActivity::class.java))
             }
             )
 

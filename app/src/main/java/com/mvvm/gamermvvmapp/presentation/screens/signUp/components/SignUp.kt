@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import com.mvvm.gamermvvmapp.domain.model.Response
 import com.mvvm.gamermvvmapp.presentation.components.ProgressBar
 import com.mvvm.gamermvvmapp.presentation.navigation.AuthScreen
+import com.mvvm.gamermvvmapp.presentation.navigation.Graph
 import com.mvvm.gamermvvmapp.presentation.screens.signUp.SignUpViewModel
 
 @Composable
@@ -22,8 +23,8 @@ fun SignUp(navController: NavHostController, viewModel: SignUpViewModel = hiltVi
             LaunchedEffect(Unit){
                 // se esta diciendo que cada vez que un usuario sea creado correctamente y su estado sea SUCCESS cree el usuario en la coleccion
                 viewModel.createUser()
-                navController.popBackStack(AuthScreen.Login.route, true)
-                navController.navigate(route = AuthScreen.Profile.route)
+                navController.popBackStack(Graph.AUTHENTICATION, true)
+                navController.navigate(route = Graph.HOME)
             }
         }
         is Response.Failure ->{

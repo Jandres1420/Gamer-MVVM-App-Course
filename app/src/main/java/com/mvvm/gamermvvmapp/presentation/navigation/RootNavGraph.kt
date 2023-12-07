@@ -25,27 +25,12 @@ fun RootNavGraph(navController: NavHostController) {
         // para la parte del grafo de autenticacion
         authNavGraph(navController = navController)
 
-        // la parte del grafo de home , NAVBAR
-        composable(route = RootScreen.Home.route){
+        // la parte del grafo de home , NAVBAR, es un composable ya que es un navhost, dentro de un
+        // navhost por lo que toca crear una pantalla que en este caso es HomeScreen()
+        composable(route = Graph.HOME){
             HomeScreen()
         }
 
-
-
-        composable(
-            route = AuthScreen.ProfileEdit.route,
-            // el navArgument() tiene que coincidir con el parametro puesto en appScreen
-            arguments = listOf(navArgument("user") {
-                type = NavType.StringType
-            })
-        )
-        {
-            // el it va a buscar dentro de la pantalla el argumento que se esta intentando pasar en este caso es String user, que tambien esta como parametro en profileEditScreen
-            // para evitar el nulo usamos let{ } , NULL SAFETY
-            it.arguments?.getString("user")?.let {
-                ProfileEditScreen(navController, user = it)
-            }
-
-        }
     }
 }
+

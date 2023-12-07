@@ -10,7 +10,6 @@ import com.mvvm.gamermvvmapp.domain.model.Response
 import com.mvvm.gamermvvmapp.presentation.components.ProgressBar
 import com.mvvm.gamermvvmapp.presentation.navigation.AuthScreen
 import com.mvvm.gamermvvmapp.presentation.navigation.Graph
-import com.mvvm.gamermvvmapp.presentation.navigation.RootScreen
 import com.mvvm.gamermvvmapp.presentation.screens.login.LogInViewModel
 
 @Composable
@@ -26,7 +25,7 @@ fun Login(navController: NavHostController, viewModel: LogInViewModel = hiltView
             /// EN ESTE CASO SOLO VA A NAVEGAR A LA PANTALLA DE PROFILE CUANDO EL ESTA SEA EXITOSO
             LaunchedEffect(Unit){
                 // de esta manera vamos a la pantalle profile, pero la idea es que no le pueda da rpara atras por lo que se usa el metodo popUpTo
-                navController.navigate(route = RootScreen.Home.route){
+                navController.navigate(route = Graph.HOME){
                     // ya no se elimina la pantalla anterior, si no todo el grafo de auth
                     popUpTo(Graph.AUTHENTICATION){ inclusive = true}
                 }
