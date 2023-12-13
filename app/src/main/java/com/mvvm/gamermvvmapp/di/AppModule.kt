@@ -7,16 +7,21 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.mvvm.gamermvvmapp.core.Constants.POSTS
 import com.mvvm.gamermvvmapp.core.Constants.USERS
 import com.mvvm.gamermvvmapp.data.repository.AuthRepositoryImpl
+import com.mvvm.gamermvvmapp.data.repository.PostRepositoryImpl
 import com.mvvm.gamermvvmapp.data.repository.UsersRepositoryImpl
 import com.mvvm.gamermvvmapp.domain.repository.AuthRepository
+import com.mvvm.gamermvvmapp.domain.repository.PostRepository
 import com.mvvm.gamermvvmapp.domain.repository.UsersRepository
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.AuthUseCases
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.GetCurrentUser
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.LogOut
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.Login
 import com.mvvm.gamermvvmapp.domain.use_cases.auth.SignUp
+import com.mvvm.gamermvvmapp.domain.use_cases.posts.CreatePost
+import com.mvvm.gamermvvmapp.domain.use_cases.posts.PostsUseCases
 import com.mvvm.gamermvvmapp.domain.use_cases.users.Create
 import com.mvvm.gamermvvmapp.domain.use_cases.users.GetUserById
 import com.mvvm.gamermvvmapp.domain.use_cases.users.SaveImage
@@ -51,6 +56,18 @@ object AppModule {
     @Provides
     fun provideUsersRef(db: FirebaseFirestore): CollectionReference = db.collection(USERS)
 
+    // Esta es la carpeta que se crea en storage con el nombre "post
+    @Provides
+    fun provideStoragePostsRef(storage: FirebaseStorage): StorageReference  = storage.reference.child(POSTS)
+
+    // firestore collection post
+    @Provides
+    fun providePostsRef(db: FirebaseFirestore): CollectionReference = db.collection(POSTS)
+
+    // ESTA ES LA CONECCION ENTRE LA INTERFAZ POSTREPOSITORY Y LA CLASE QUE LA IMPLEMENTA POSTREPOSITORYIMPL
+    @Provides
+    fun providePostsRepository(impl: PostRepositoryImpl): PostRepository = impl
+
     // ESTA ES LA CONECCION ENTRE LA INTERFAZ Y LA CLASE QUE LA IMPLEMENTA
     @Provides
     fun provideUsersRepository(impl: UsersRepositoryImpl): UsersRepository = impl
@@ -72,5 +89,10 @@ object AppModule {
         getUserById = GetUserById(repository),
         update = Update(repository),
         saveImage = SaveImage(repository)
+    )
+
+    @Provides
+    fun providePostsUseCases(repository: PostRepository) = PostsUseCases(
+        create = CreatePost(repository),
     )
 }
