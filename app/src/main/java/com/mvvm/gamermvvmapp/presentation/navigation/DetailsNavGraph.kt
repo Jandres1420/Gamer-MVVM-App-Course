@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.mvvm.gamermvvmapp.presentation.screens.new_post.NewPostScreen
 import com.mvvm.gamermvvmapp.presentation.screens.profile_edit.ProfileEditScreen
 
 fun NavGraphBuilder.detailsNavGraph(navController: NavHostController) {
@@ -29,10 +30,16 @@ fun NavGraphBuilder.detailsNavGraph(navController: NavHostController) {
             }
 
         }
+        
+        composable(route = DetailsScreen.NewPost.route){
+            NewPostScreen(navController = navController)
+        }
     }
 }
 
 sealed class DetailsScreen( val route: String){
+    object NewPost: DetailsScreen("posts/new")
+
     //    para especificar el parametro toca usar el {noombre de parametro}
     object ProfileEdit: DetailsScreen("profile/edit/{user}") {
         //     es como pasar por url y se pasa el parametro user
