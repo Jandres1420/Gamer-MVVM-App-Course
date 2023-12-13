@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.mvvm.gamermvvmapp.presentation.components.DefaultButton
@@ -19,7 +20,7 @@ import com.mvvm.gamermvvmapp.presentation.screens.new_post.components.NewPostCon
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun NewPostScreen(navController: NavHostController){
+fun NewPostScreen(navController: NavHostController, viewModel: NewPostViewModel = hiltViewModel()){
     Scaffold(
         topBar = {
                  DefaultTopBar(title = "Nuevo Post", upAvaible = true, navController = navController)
@@ -29,7 +30,7 @@ fun NewPostScreen(navController: NavHostController){
         },
         bottomBar = {
             DefaultButton(text = "PUBLICAR",
-                onClick = {},
+                onClick = { viewModel.onNewPost()},
                 modifier = Modifier.fillMaxWidth())
         }
 
