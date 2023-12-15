@@ -86,6 +86,7 @@ class NewPostViewModel @Inject constructor(
             image = "",
             name = ""
         )
+        createPostResponse = null
     }
     fun onNameInput(name:String){
         state = state.copy(name = name)
