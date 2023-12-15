@@ -6,6 +6,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
+import com.mvvm.gamermvvmapp.core.Constants
 import com.mvvm.gamermvvmapp.domain.model.Response
 import com.mvvm.gamermvvmapp.domain.model.User
 import com.mvvm.gamermvvmapp.domain.repository.UsersRepository
@@ -16,10 +17,13 @@ import kotlinx.coroutines.tasks.await
 import java.io.File
 import java.lang.Exception
 import javax.inject.Inject
+import javax.inject.Named
+import com.mvvm.gamermvvmapp.core.Constants.USERS
+
 // importante saaber que en la injeccion se dice que userRef esta en la coleccion User
 class UsersRepositoryImpl @Inject constructor(
-    private val userRef: CollectionReference,
-    private val storageUsersRef: StorageReference
+    @Named(USERS) private val userRef: CollectionReference,
+    @Named(USERS) private val storageUsersRef: StorageReference
 ): UsersRepository {
 
     // la manera sin injeccion de dependencias seria

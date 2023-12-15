@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mvvm.gamermvvmapp.presentation.components.DefaultButton
 import com.mvvm.gamermvvmapp.presentation.components.DefaultTopBar
 import com.mvvm.gamermvvmapp.presentation.navigation.DetailsScreen
+import com.mvvm.gamermvvmapp.presentation.screens.new_post.components.NewPost
 import com.mvvm.gamermvvmapp.presentation.screens.new_post.components.NewPostContent
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -33,8 +34,8 @@ fun NewPostScreen(navController: NavHostController, viewModel: NewPostViewModel 
                 onClick = { viewModel.onNewPost()},
                 modifier = Modifier.fillMaxWidth())
         }
-
     )
+    NewPost()
 
 }
 

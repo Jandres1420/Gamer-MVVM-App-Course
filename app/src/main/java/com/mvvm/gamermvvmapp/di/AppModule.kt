@@ -31,6 +31,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -51,17 +52,24 @@ object AppModule {
 
     // Esta es la carpeta que se crea en storage con el nombre "Users
     @Provides
-    fun provideStorageUsersRef(storage: FirebaseStorage): StorageReference  = storage.reference.child(USERS)
+    @Named(USERS)
+    fun provideStorageUsersRef(storage: FirebaseStorage): StorageReference =
+        storage.reference.child(USERS)
 
     @Provides
+    @Named(USERS)
     fun provideUsersRef(db: FirebaseFirestore): CollectionReference = db.collection(USERS)
 
     // Esta es la carpeta que se crea en storage con el nombre "post
     @Provides
+    @Named(POSTS)
     fun provideStoragePostsRef(storage: FirebaseStorage): StorageReference  = storage.reference.child(POSTS)
 
     // firestore collection post
+    // IMPORTANTE CUANDO SON DEL MISMO TIPO como lo son los metodos providePostsRef provideUsersRef que son de tipo  CollectionReference
+    // saldra duplicate binding, porque no sabra cual diferenciar al momento de la injeccion, cual de los dos metodos, se resuelve con la anotación NAMEd
     @Provides
+    @Named(POSTS)
     fun providePostsRef(db: FirebaseFirestore): CollectionReference = db.collection(POSTS)
 
     // ESTA ES LA CONECCION ENTRE LA INTERFAZ POSTREPOSITORY Y LA CLASE QUE LA IMPLEMENTA POSTREPOSITORYIMPL
