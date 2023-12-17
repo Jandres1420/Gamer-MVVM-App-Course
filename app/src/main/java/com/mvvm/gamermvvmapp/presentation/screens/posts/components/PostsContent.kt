@@ -21,7 +21,7 @@ fun PostsContent(
             .background(Darkgray700)
     ) {
         items(items = posts){post ->
-            Text(color = Color.White,text = post.name)
+            PostsCard(post = post)
         }
     }
 }
