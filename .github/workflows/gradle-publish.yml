@@ -29,7 +29,9 @@ jobs:
           ~/.gradle/wrapper
         key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: gradle-${{ runner.os }}
-
+    - name: Grant execute permission to gradlew
+      run: chmod +x ./gradlew
+      
     - name: Run Detekt (Kotlin static analysis)
       run: ./gradlew detekt
 
